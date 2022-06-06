@@ -13,3 +13,10 @@ class Post(models.Model):
         return f'{self.author.username} post'
 
     
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(default='', upload_to='profile_pics')
+    profile_caption = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f'{self.user.username} Profile'
