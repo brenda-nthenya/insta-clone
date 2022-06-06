@@ -1,6 +1,7 @@
 from django.db import models
 from cloudinary.models import CloudinaryField
 from django.contrib.auth.models import User
+from django.utils import timezone
 # Create your models here.
 
 class Post(models.Model):
@@ -8,6 +9,7 @@ class Post(models.Model):
     image = models.ImageField(upload_to='posts')
     caption = models.CharField(max_length=255)
     likes = models.IntegerField(default=0)
+    date_posted = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f'{self.author.username} post'
@@ -29,4 +31,6 @@ class Comment(models.Model):
     def __str__(self):
         return self.body
 
-        
+class Like(models.Model):
+    user = models.ForeignKey(User, related_name='likes', on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, related_name='likes', on_delete=models.CASCADE)
