@@ -12,10 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
-from decouple import config, Csv
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
+from decouple import config,Csv
+
 import django_heroku
 import dj_database_url
 
@@ -40,15 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'insta_glam',
-    'cloudinary',
     'bootstrap5',
     'crispy_forms',
 
 ]
 
 MIDDLEWARE = [
-    # Simplified static file serving.
-    # https://warehouse.python.org/project/whitenoise/
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
