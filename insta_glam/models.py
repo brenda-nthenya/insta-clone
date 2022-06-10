@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-# from autoslug import AutoSlugField
+
 from PIL import Image
 
 # Create your models here.
@@ -15,7 +15,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     image = models.ImageField(default='', upload_to='profile_pics')
     bio = models.CharField(max_length=255)
-    # slug = models.SlugField(max_length=500, unique=True, blank=True, null=True)
+    
     name = models.CharField(blank=True, max_length=120)
 
     
