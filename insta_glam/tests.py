@@ -22,10 +22,10 @@ class TestProfile(TestCase):
 
 class TestPost(TestCase):
     def setUp(self):
-        self.profile_test = Profile(author='charles', user=User(username='mikey'))
+        self.profile_test = Profile(name='charles', user=User(username='mikey'))
         self.profile_test.save()
 
-        self.image_test = Post(image='default.png', name='test', caption='default test', user=self.profile_test)
+        self.image_test = Post(image='default.png', author='test', caption='default test', user=self.profile_test)
 
     def test_insatance(self):
         self.assertTrue(isinstance(self.image_test, Post))
