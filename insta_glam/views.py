@@ -35,7 +35,8 @@ def add_comment(request):
         c_form = CommentForm(instance=request.user)
 
     if c_form.is_valid():
-        print(c_form)
+        # print(c_form)
+
         c_form.save()
 
         messages.success(
@@ -44,23 +45,29 @@ def add_comment(request):
     context = {
         'c_form': c_form
     }
-    return render(request, 'comment_form.html', context)
+    return render(request, 'insta_glam/comment_form.html', context)
 
 @login_required
 def profile_info(request):
-    profiles = Profile.objects.filter(user=request.user)
-    if not profiles.first():
-        profile = Profile.objects.create(user=request.user)
-        profile.save()
-        profile = Profile.objects.get(user=request.user)
-        posts = Post.objects.filter(author=request.user)
-        context = {
-           "profiles": profile,
-           "posts":posts
-    }
+    current_user = request.user
+    if request.method == 'POST':
+        p_form = ProfileEditForm(
+            request.POST, request.FILES,instance=request.user.profile
+        )
+    else:
+        p_form = ProfileEditForm(instance=request.user.profile)
 
-    return render(request, 'profile/profile.html')
-    # return HttpResponse()    
+    if  p_form.is_valid():
+        p_form.save()
+
+        messages.success(
+            request, f'Your profile has been updated successfully')
+        return redirect('profile_edit')
+    context = {
+        'p_form': p_form
+    }
+    return render(request, 'profile/profile.html', context)
+
 
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
@@ -91,20 +98,23 @@ def profile_edit(request):
     context = {
         'p_form': p_form
     }
-    return render(request, 'profile/edit_profile.html', context)
+    return render(request, 'profile/profile.html', context)
 
-def search_results(request):
-
-    if 'article' in request.GET and request.GET["article"]:
-        name = request.GET.get("article")
-        users= Profile.get_user(name)
-        message = f"{name}"
-
-        return render(request, 'search_results.html',{"message":message,"users": users})
-
+@login_required(login_url='login')
+def search_profile(request):
+    if 'search_user' in request.GET and request.GET['search_user']:
+        name = request.GET.get("search_user")
+        results = Profile.search_profile(name)
+        print(results)
+        message = f'name'
+        params = {
+            'results': results,
+            'message': message
+        }
+        return render(request, 'search_results.html', params)
     else:
-        message = "You haven't searched for any term"
-        return render(request, 'search_results.html', {"message": message})
+        message = "You haven't searched for any image category"
+    return render(request, 'search_results.html', {'message': message})
 
 def register(request):
     if request.method == 'POST':
