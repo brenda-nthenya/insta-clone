@@ -11,7 +11,7 @@ urlpatterns = [
     path('accounts/profile/',views.profile_info,name='profile'),
     path('profile_edit/', views.profile_edit, name='profile_edit'),
     path('accounts/login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
-    path('search', views.search_results, name='search_results'),
+    path('search', views.search_profile, name='search_profile'),
     path('edit/', views.profile_edit, name='edit'),
     path('add_comment/', views.CommentCreateView.as_view(),name='add_comment'),
     
