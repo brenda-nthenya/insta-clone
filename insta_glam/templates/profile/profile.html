@@ -1,85 +1,75 @@
-{% extends 'profile/base.html'%}
+{% extends 'profile/base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
+<div class="container" style="margin-top:8%">
+    <div class="content-section">
+        <div class="media">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img class="mr-3" style="max-width:300px" src="{{ user.profile.image.url }}">
+                    </div>
+					<div class="col-md-2"></div>
+                    <div class="media-body col-md-7">
+						<div class="account-heading"><span class="mr-3 text-secondary username" style="font-size:25.00px">{{ user.username }}</span>
+							<a class="btn btn-sm btn-outline-secondary mr-3" data-toggle="modal" data-target=".bd-example-modal-md" style="font-size:25.00px"><strong>Edit Profile</strong></a>
+							<a class="mt-3" data-toggle="modal" data-target="#ModalCenter"><i class="fa fa-cog mt-3" id="cog"></i></a>
+						</div>
 
-<header>
+						<div class="col-md-3" style="font-size:20.00px">
+							<span class="mr-4"><strong>{{images.count}}</strong> Posts</span>
+							<br>
+							<h5>{{ user.profile.name }}</h5>
+							<br>
+							<h3>Bio:</h3>
+							<p class="text-secondary">{{ user.profile.bio }}</p>
+						</div>
+						
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade bd-example-modal-sm" id="ModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <a class="D-block mx-auto" href="">Change Password</a>
+                        <hr>
+                        <hr>
+                        <a class="D-block mx-auto" href="" data-dismiss="modal">Close</a>
+                    </div>
 
-	<div class="container">
-
-		<div class="profile">
-
-			<div class="profile-image">
-				{% if profile.image %}
-				<img src="{{user.profile.bio}}" alt="">
-                {% endif %}
-			</div>
-
-			<div class="profile-user-settings">
-
-				<h1 class="profile-user-name">{{profile.user.username}}</h1>
-
-				<a href="{% url 'profile_edit' %}" class="btn profile-edit-btn">Edit Profile</a>
-
-				<button class="btn profile-settings-btn" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button>
-
-			</div>
-
-			<div class="profile-stats">
-
-				<ul>
-					<li><span class="profile-stat-count">{{posts.count}}</span> posts</li>
-					<!-- <li><span class="profile-stat-count">188</span> followers</li> -->
-					<!-- <li><span class="profile-stat-count">206</span> following</li> -->
-				</ul>
-
-			</div>
-
-			<div class="profile-bio">
-
-				<p><span class="profile-real-name"></span> {{profile.bio}}</p>
-
-			</div>
-
-		</div>
-		<!-- End of profile section -->
-
-	</div>
-	<!-- End of container -->
-
-</header>
-
-<main>
-
-	<div class="container">
-
-		<div class="gallery">
-
-            {% for post in posts %}
-                <div class="gallery-item" tabindex="0">
-
-				<img src="{{post.image.url}}" class="gallery-image" alt="">
-
-				<div class="gallery-item-info">
-
-					<ul>
-						<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 56</li>
-						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 2</li>
-					</ul>
-
-				</div>
-
-			</div>
-            {% endfor %}
-			</div>
-		<!-- End of gallery -->
-
-		<!-- <div class="loader"></div> -->
-		{% if posts.count == 0 %}
-			<p>You currenty don't have any posts</p>
-		{% endif %}
-
-	</div>
-	<!-- End of container -->
-
-</main>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade bd-example-modal-md" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md ">
+                <div class="modal-content">
+                    <form action="" method="post" novalidate enctype="multipart/form-data" class="mr-4 mt-4 ml-4 mb-4">
+                        {% csrf_token%}
+                        {{ p_form|crispy}}
+                        
+                        <button type="submit" class="btn btn-primary btn-sm"> Update Profile</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="mt-4">
+    <div class="card-columns">
+        {% for image in images %}
+            <div class="card">
+                <div class="card-body">
+                    <img src="{{image.image.url}}" alt="{{image.caption}}" class="card-img">
+                    <p id="overlay"class="text"> 
+                            <i class="fas fa-heart" style="color:white; font-size: 18"></i> 
+                            <span style="color: white">{{image.likes.count}}</span>
+                             <i class="fas fa-comment ml-4" style="color: white"></i> <span style="color: white">{{image.comments.count}}</span></p>
+                    
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 
 {% endblock %}
